@@ -8,6 +8,10 @@
 #ifndef _AVRPP_IO_MXXX4_USART_H_
 #define _AVRPP_IO_MXXX4_USART_H_
 
+#ifndef _AVRPP_IO_H_
+#  error "Include <avrpp/io.h> instead of this file."
+#endif
+
 #include <avr/io.h>
 #include <util/atomic.h>
 #include <avrpp/io/edge.h>

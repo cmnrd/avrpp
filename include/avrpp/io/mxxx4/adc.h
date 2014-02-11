@@ -8,9 +8,12 @@
 #ifndef _AVRPP_IO_MXXX4_ADC_H_
 #define _AVRPP_IO_MXXX4_ADC_H_
 
+#ifndef _AVRPP_IO_H_
+#  error "Include <avrpp/io.h> instead of this file."
+#endif
+
 #include <avr/io.h>
 #include <util/atomic.h>
-
 
 #define AVRPP_IO_ADC_REFERENCE_BITS ((1 << REFS0) | (1 << REFS1))
 #define AVRPP_IO_ADC_CHANNEL_BITS   ((1 << MUX0) | (1 << MUX1) | (1 << MUX2) | (1 << MUX3) | (1 << MUX4))

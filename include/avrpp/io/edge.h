@@ -8,6 +8,10 @@
 #ifndef _AVRPP_IO_EDGE_H_
 #define _AVRPP_IO_EDGE_H_
 
+#ifndef _AVRPP_IO_H_
+#  error "Include <avrpp/io.h> instead of this file."
+#endif
+
 namespace avrpp
 {
 namespace io

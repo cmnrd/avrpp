@@ -8,6 +8,10 @@
 #ifndef _AVRPP_IO_MXXX4_TIMER0_H_
 #define _AVRPP_IO_MXXX4_TIMER0_H_
 
+#ifndef _AVRPP_IO_H_
+#  error "Include <avrpp/io.h> instead of this file."
+#endif
+
 #include <avr/io.h>
 
 #define AVRPP_IO_TIMER0_CS0BITS ((1 << CS00) | (1 << CS01) | (1 << CS02))

@@ -8,6 +8,10 @@
 #ifndef __AVRPP_IO_MXXX4TIMER2_H_
 #define __AVRPP_IO_MXXX4TIMER2_H_
 
+#ifndef _AVRPP_IO_H_
+#  error "Include <avrpp/io.h> instead of this file."
+#endif
+
 #include <avr/io.h>
 
 #define AVRPP_IO_TIMER2_CS2BITS ((1 << CS20 ) | (1 << CS21) | (1 << CS22))
