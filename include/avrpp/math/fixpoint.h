@@ -9,43 +9,43 @@
 #define _AVRPP_MATH_FIXPOINT_H_
 
 #include <inttypes.h>
+#include <avrpp/util/type_traits.h>
 
 namespace avrpp
 {
 namespace math
 {
 	template<typename T,		// base type
-		     typename U,		// magnitude type
-		     typename V,		// base type with double size
 			 uint8_t magnitudeDigits,
 			 uint8_t fractionDigits>
 	class Fixpoint
 	{
 	  private:
+		typedef typename util::make_unsigned<T>::type uT;
+
 		union
 		{
 			T fixpoint;
 			struct
 			{
-				U fraction  : fractionDigits;
-				T magnitude : magnitudeDigits;
+				uT fraction  : fractionDigits;
+				T  magnitude : magnitudeDigits;
 			};
 		};
+
 	  public:
 		Fixpoint() : fixpoint(0) {}
-		Fixpoint(T _magnitude, U _fraction) : fraction(_fraction), magnitude(_magnitude) {}
+		Fixpoint(T _magnitude, uT _fraction) : fraction(_fraction), magnitude(_magnitude) {}
 		Fixpoint(T _magnitude) : fraction(0), magnitude(_magnitude) {}
-		Fixpoint(float d)
+		Fixpoint(double d)
 		{
 			fixpoint = (T) (d * (((T) 1) << fractionDigits));
 		}
 
 		template<typename T2,
-						 typename U2,
-						 typename V2,
-						 uint8_t magnitudeDigits2,
-						 uint8_t fractionDigits2>
-		Fixpoint(const Fixpoint<T2, U2, V2, magnitudeDigits2, fractionDigits2>& f)
+				 uint8_t magnitudeDigits2,
+				 uint8_t fractionDigits2>
+		Fixpoint(const Fixpoint<T2, magnitudeDigits2, fractionDigits2>& f)
 		{
 			if( sizeof(T2) > sizeof(T))
 			{
@@ -56,7 +56,6 @@ namespace math
 			}
 			else
 			{
-
 				if( fractionDigits2 > fractionDigits)
 					this->fixpoint = ( ((T) f.getFixpoint()) >> (fractionDigits2 - fractionDigits));
 				else
@@ -64,17 +63,16 @@ namespace math
 			}
 		}
 
-
 		static Fixpoint createByDivision(T x, T y)
 		{
 			Fixpoint result;
-			result.fixpoint = (((V) x) << fractionDigits) / y;
+			result.fixpoint = (((typename util::make_double_size<T>::type) x) << fractionDigits) / y;
 			return result;
 		}
 
-		T getFixpoint() 	 const { return fixpoint; }
-		T getMagnitude()     const { return magnitude; }
-		U getFraction()      const { return fraction; }
+		T  getFixpoint()  const { return fixpoint; }
+		T  getMagnitude() const { return magnitude; }
+		uT getFraction()  const { return fraction; }
 
 		Fixpoint& operator+=( const Fixpoint& f)
 		{
@@ -336,7 +334,7 @@ namespace math
 			return *this;
 		}
 
-		Fixpoint& operator=(float d)
+		Fixpoint& operator=(double d)
 		{
 			this->fixpoint = (T) (d * (((T) 1) << fractionDigits));
 			return *this;
@@ -353,9 +351,7 @@ namespace math
 		{
 			Fixpoint result;
 
-			V tmp = ((V) this->fixpoint) * ((V) f.fixpoint);
-
-			result.fixpoint = T (tmp >> fractionDigits);
+			result.fixpoint = extended_multiply(this->fixpoint, f.fixpoint) >> fractionDigits;
 
 			return result;
 		}
@@ -410,9 +406,9 @@ namespace math
 		}
 	};
 
-	typedef Fixpoint<int32_t, uint16_t, int64_t, 16, 16> FixpointS16_16;
-	typedef Fixpoint<int16_t, uint16_t, int32_t, 4, 12>  FixpointS4_12;
-	typedef Fixpoint<int16_t, uint16_t, int32_t, 8, 8>   FixpointS8_8;
+	typedef Fixpoint<int32_t, 16, 16> FixpointS16_16;
+	typedef Fixpoint<int16_t, 4, 12>  FixpointS4_12;
+	typedef Fixpoint<int16_t, 8, 8>   FixpointS8_8;
 }
 }
 
@@ -427,9 +423,9 @@ template<typename T,
 			 uint8_t fractionDigits>
 io::OStreamUart& operator<<( io::OStreamUart& stream, const math::Fixpoint<T,U,V,magnitudeDigits,fractionDigits>& f)
 {
-	float x = 0.0;
+	double x = 0.0;
 
-	x = ((float) f.getFixpoint()) / ( ( (T) 1) << fractionDigits);
+	x = ((double) f.getFixpoint()) / ( ( (T) 1) << fractionDigits);
 
 	stream << x;
 
