@@ -420,6 +420,9 @@ namespace math
 					return magnitude;
 			}
 		}
+		
+		operator double() { return ((double) (this->fixpoint)) / ( ( (T) 1) << fractionDigits); }
+
 	};
 
 	typedef Fixpoint<int32_t, 16, 16> FixpointS16_16;
