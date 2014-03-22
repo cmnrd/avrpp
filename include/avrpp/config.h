@@ -1,0 +1,28 @@
+/**
+ * @file config.h
+ *
+ * @date 10.07.2013
+ * @author Christian Menard
+ */
+
+#ifndef _AVRPP_CONFIG_H_
+#define _AVRPP_CONFIG_H_
+
+#ifndef F_CPU
+#define F_CPU 20000000L
+#endif
+
+#define BAUD 57600
+#define BAUD1 38400
+#define SCL_CLOCK  200000L
+
+#define STREAM_TEMP_STRING_SIZE 16
+#define UART1_RECEIVER_BUFFER_SIZE 64
+#define UART1_TRANSMITTER_BUFFER_SIZE 64
+#define UART0_RECEIVER_BUFFER_SIZE 64
+#define UART0_TRANSMITTER_BUFFER_SIZE 64
+
+#define TWI_TRANSMIT_BUFFER_SIZE 64
+#define TWI_TRANSMIT_MAX_FRAME_SIZE 4
+
+#endif /* _AVRPP_CONFIG_H_ */
