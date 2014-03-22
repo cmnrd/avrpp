@@ -41,7 +41,7 @@ namespace math
 
 		union
 		{
-			T fixpoint;
+			T fixpoint : (fractionDigits+magnitudeDigits);
 			struct
 			{
 				uT fraction  : fractionDigits;
