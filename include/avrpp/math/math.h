@@ -91,8 +91,23 @@ int16_t extended_multiply(uint8_t x, int8_t y)
 	return ((uint16_t) x) * ((int16_t) y);
 }
 
+template<typename T>
+void lowPassFilter_mul(T& mem, T x, float f)
+{
+	mem = mem * (1-f) + x * f;
+}
 
+template<typename T>
+void lowPassFilter_shiftLeft(T& mem, T x, uint8_t shift)
+{
+	mem = ((mem << shift) - mem + x) >> shift;
+}
 
+template<typename T>
+void lowPassFilter_shiftRight(T& mem, T x, uint8_t shift)
+{
+	mem = mem - ((mem + x) >> shift);
+}
 
 
 }

@@ -26,6 +26,7 @@
 
 #include <inttypes.h>
 #include <avrpp/util/type_traits.h>
+#include <avrpp/math/math.h>
 
 namespace avrpp
 {
@@ -423,24 +424,73 @@ namespace math
 		
 		operator double() { return ((double) (this->fixpoint)) / ( ( (T) 1) << fractionDigits); }
 
+		template<typename U>
+		Fixpoint arctan2( U a, U b)
+		{
+			// algorithm is explained here: http://www.dspguru.com/book/export/html/61
+
+			/*         ^   /|
+			 *         |  / | b
+			 *         | /  |
+			 *	       |/p) |
+			 *	-------+----+-->		p = arctan(b/a)
+			 *         |  a
+			 *         |
+			 *         |
+			 */
+
+			U abs_a = (a >= 0) ? a : -a;
+			U abs_b = (b >= 0) ? b : -b;
+
+			Fixpoint r;
+			r = createByDivision(abs_a-abs_b, abs_a+abs_b);
+
+			if( a < 0)
+				r = -r;
+			// -> r is in fixpoint format and is in range -1.0 <0 r <= 1.0
+
+			Fixpoint tmp1;
+
+			// calculate r^3
+			tmp1 = (r * r);
+			tmp1 *= r;
+
+			Fixpoint angle = Fixpoint(0.1963f) * tmp1 - Fixpoint(0.9817f) * r;
+
+			if( a >= 0)
+			{
+				angle += Fixpoint(0.7854f); // += pi/4
+			}
+			else
+			{
+				angle += Fixpoint(2.3562f); // += 3*pi/4
+			}
+
+			if( b <  0)
+			{
+				angle = -angle;
+			}
+
+			return angle;
+		}
+
 	};
 
 	typedef Fixpoint<int32_t, 16, 16> FixpointS16_16;
 	typedef Fixpoint<int16_t, 4, 12>  FixpointS4_12;
 	typedef Fixpoint<int16_t, 8, 8>   FixpointS8_8;
+
+
 }
 }
 
-/* FIXME
-#include "../io/iostream.h"
 
+#ifdef _AVRPP_UTIL_OSTREAM_H_
 
 template<typename T,
-		     typename U,
-		     typename V,
-			 uint8_t magnitudeDigits,
-			 uint8_t fractionDigits>
-io::OStreamUart& operator<<( io::OStreamUart& stream, const math::Fixpoint<T,U,V,magnitudeDigits,fractionDigits>& f)
+		 uint8_t magnitudeDigits,
+		 uint8_t fractionDigits>
+avrpp::util::OStreamUart& operator<<( avrpp::util::OStreamUart& stream, const avrpp::math::Fixpoint<T,magnitudeDigits,fractionDigits>& f)
 {
 	double x = 0.0;
 
@@ -449,6 +499,8 @@ io::OStreamUart& operator<<( io::OStreamUart& stream, const math::Fixpoint<T,U,V
 	stream << x;
 
 	return stream;
-}*/
+}
+
+#endif
 
 #endif /* __AVRPP_MATH_FIXPOINT_H_ */
