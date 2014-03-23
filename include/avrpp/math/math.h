@@ -29,80 +29,80 @@
 namespace avrpp
 {
 
-uint64_t extended_multiply(uint32_t x, uint32_t y)
+extern inline uint64_t extended_multiply(uint32_t x, uint32_t y)
 {
 	return ((uint64_t) x) * ((uint64_t) y);
 }
 
-int64_t extended_multiply(int32_t x, int32_t y)
+extern inline int64_t extended_multiply(int32_t x, int32_t y)
 {
 	return ((int64_t) x) * ((int64_t) y);
 }
 
-int64_t extended_multiply(int32_t x, uint32_t y)
+extern inline int64_t extended_multiply(int32_t x, uint32_t y)
 {
 	return ((int64_t) x) * ((uint64_t) y);
 }
 
-int64_t extended_multiply(uint32_t x, int32_t y)
+extern inline int64_t extended_multiply(uint32_t x, int32_t y)
 {
 	return ((uint64_t) x) * ((int64_t) y);
 }
 
-uint32_t extended_multiply(uint16_t x, uint16_t y)
+extern inline  uint32_t extended_multiply(uint16_t x, uint16_t y)
 {
 	return ((uint32_t) x) * ((uint32_t) y);
 }
 
-int32_t extended_multiply(int16_t x, int16_t y)
+extern inline int32_t extended_multiply(int16_t x, int16_t y)
 {
 	return ((int32_t) x) * ((int32_t) y);
 }
 
-int32_t extended_multiply(int16_t x, uint16_t y)
+extern inline int32_t extended_multiply(int16_t x, uint16_t y)
 {
 	return ((int32_t) x) * ((uint32_t) y);
 }
 
-int32_t extended_multiply(uint16_t x, int16_t y)
+extern inline int32_t extended_multiply(uint16_t x, int16_t y)
 {
 	return ((uint32_t) x) * ((int32_t) y);
 }
 
-uint16_t extended_multiply(uint8_t x, uint8_t y)
+extern inline uint16_t extended_multiply(uint8_t x, uint8_t y)
 {
 	return ((uint16_t) x) * ((uint16_t) y);
 }
 
-int16_t extended_multiply(int8_t x, int8_t y)
+extern inline int16_t extended_multiply(int8_t x, int8_t y)
 {
 	return ((int16_t) x) * ((int16_t) y);
 }
 
-int16_t extended_multiply(int8_t x, uint8_t y)
+extern inline int16_t extended_multiply(int8_t x, uint8_t y)
 {
 	return ((int16_t) x) * ((uint16_t) y);
 }
 
-int16_t extended_multiply(uint8_t x, int8_t y)
+extern inline int16_t extended_multiply(uint8_t x, int8_t y)
 {
 	return ((uint16_t) x) * ((int16_t) y);
 }
 
 template<typename T>
-void lowPassFilter_mul(T& mem, T x, float f)
+extern inline  void lowPassFilter_mul(T& mem, T x, float f)
 {
 	mem = mem * (1-f) + x * f;
 }
 
 template<typename T>
-void lowPassFilter_shiftLeft(T& mem, T x, uint8_t shift)
+extern inline  void lowPassFilter_shiftLeft(T& mem, T x, uint8_t shift)
 {
 	mem = ((mem << shift) - mem + x) >> shift;
 }
 
 template<typename T>
-void lowPassFilter_shiftRight(T& mem, T x, uint8_t shift)
+extern inline void lowPassFilter_shiftRight(T& mem, T x, uint8_t shift)
 {
 	mem = mem - ((mem + x) >> shift);
 }

@@ -125,9 +125,29 @@ template<>
 struct make_double_size<int32_t>
 { typedef int64_t type; };
 
+union Word16
+{
+	uint16_t word;
+
+	struct
+	{
+		uint8_t low;
+		uint8_t high;
+	};
+};
+
+union Word32
+{
+	uint32_t word;
+
+	struct
+	{
+		uint16_t low;
+		uint16_t high;
+	};
+};
+
 }
-
-
 
 
 #endif /* TYPE_TRAITS_H_ */

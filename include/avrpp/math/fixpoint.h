@@ -36,7 +36,7 @@ namespace avrpp
 	class Fixpoint
 	{
 	  private:
-		typedef typename util::make_unsigned<T>::type uT;
+		typedef typename make_unsigned<T>::type uT;
 
 		union
 		{
@@ -56,6 +56,11 @@ namespace avrpp
 		{
 			fixpoint = (T) (d * (((T) 1) << fractionDigits));
 		}
+		Fixpoint(float d)
+		{
+			fixpoint = (T) (d * (((T) 1) << fractionDigits));
+		}
+
 
 		template<typename T2,
 				 uint8_t magnitudeDigits2,
@@ -81,7 +86,7 @@ namespace avrpp
 		static Fixpoint createByDivision(T x, T y)
 		{
 			Fixpoint result;
-			result.fixpoint = (((typename util::make_double_size<T>::type) x) << fractionDigits) / y;
+			result.fixpoint = (((typename make_double_size<T>::type) x) << fractionDigits) / y;
 			return result;
 		}
 
@@ -420,10 +425,11 @@ namespace avrpp
 			}
 		}
 		
-		operator double() { return ((double) (this->fixpoint)) / ( ( (T) 1) << fractionDigits); }
+		// TODO fix this
+		/*operator double() { return ((double) (this->fixpoint)) / ( ( (T) 1) << fractionDigits); }*/
 
 		template<typename U>
-		Fixpoint arctan2( U a, U b)
+		static Fixpoint arctan2( U a, U b)
 		{
 			// algorithm is explained here: http://www.dspguru.com/book/export/html/61
 
@@ -481,13 +487,13 @@ namespace avrpp
 
 }
 
-
-#ifdef _AVRPP_UTIL_OSTREAM_H_
+#include <avrpp/util/ostream.h>
 
 template<typename T,
 		 uint8_t magnitudeDigits,
-		 uint8_t fractionDigits>
-avrpp::OStreamUart& operator<<( avrpp::OStreamUart& stream, const avrpp::Fixpoint<T,magnitudeDigits,fractionDigits>& f)
+		 uint8_t fractionDigits,
+		 void (transmitByte)(uint8_t)>
+avrpp::OStream<transmitByte>& operator<<( avrpp::OStream<transmitByte>& stream, const avrpp::Fixpoint<T,magnitudeDigits,fractionDigits>& f)
 {
 	double x = 0.0;
 
@@ -497,7 +503,5 @@ avrpp::OStreamUart& operator<<( avrpp::OStreamUart& stream, const avrpp::Fixpoin
 
 	return stream;
 }
-
-#endif
 
 #endif /* __AVRPP_MATH_FIXPOINT_H_ */
