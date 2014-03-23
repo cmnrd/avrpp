@@ -21,71 +21,57 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef _AVRPP_DRIVER_UARTTRANSMITTER_H_
-#define _AVRPP_DRIVER_UARTTRANSMITTER_H_
+#ifndef _AVRPP_HAL_ADCREADER_H_
+#define _AVRPP_HAL_ADCREADER_H_
 
-#include <avrpp/io.h>
-#include <avrpp/config.h>
-#include <avrpp/util/buffer.h>
 #include <avr/interrupt.h>
-#include <util/setbaud.h>
+#include <avrpp/io.h>
 
-ISR(USART0_UDRE_vect);
-ISR(USART1_UDRE_vect);
-
-// TODO split Uart0 and Uart1 into separate headers
-// TODO do not use macros to calculate baud values
-// TODO use template parameters for buffer size
-// TODO find a way to implement the ISRs inside the header
+ISR(ADC_vect);
 
 namespace avrpp
 {
-namespace driver
+namespace hal
 {
-	class Uart0Transmitter
+
+	class AdcReader
 	{
-		friend void (::USART0_UDRE_vect) ();
+	  friend void (::ADC_vect) (); // Allow ISR to access private elements
 
 	  private:
-		static util::Buffer<uint8_t, UART0_TRANSMITTER_BUFFER_SIZE> buffer;
+		static volatile uint16_t values[8];
+		static volatile uint8_t updatedFlags;
+
 	  public:
-		static void init()
+		static void init() // TODO let user choose the prescaler
 		{
-			DDRD |= (1 << PD1); // TODO generalize this
+			// Enable and set prescaler to 16 (125kHz)
+			io::ADConverter::setPrescaler(io::AdcPrescaler::PRESCALER_16);
+			io::ADConverter::enable();
+			io::ADConverter::enableInterrupt();
 
-			io::Usart0::writeBaud(UBRR_VALUE);
-
-			if( USE_2X)
-				io::Usart0::enableDoubleSpeed();
-
-			io::Usart0::enableTransmitter();
+			// Start a first conversion to trigger ISR
+			io::ADConverter::setChannel(io::AdcChannel::ADC0);
+			io::ADConverter::startConversion();
 		}
 
-		static void write( uint8_t byte);
-	};
-
-	class Uart1Transmitter
-	{
-		friend void (::USART1_UDRE_vect) ();
-
-	  private:
-		static util::Buffer<uint8_t, UART1_TRANSMITTER_BUFFER_SIZE> buffer;
-	  public:
-		static void init()
+		static uint16_t getValue( uint8_t channel)
 		{
-			DDRD |= (1 << PD3);
-
-			io::Usart1::writeBaud(UBRR_VALUE);
-
-			if( USE_2X)
-				io::Usart1::enableDoubleSpeed();
-
-			io::Usart1::enableTransmitter();
+			return values[channel];
 		}
 
-		static void write( uint8_t byte);
+		static bool isUpdatedFlagSet( uint8_t channel)
+		{
+			return updatedFlags & (1 << channel);
+		}
+
+		static void clearUpdatedFlag( uint8_t channel)
+		{
+			updatedFlags &= ~(1 << channel);
+		}
 	};
 }
 }
 
-#endif /* _AVRPP_DRIVER_UARTTRANSMITTER_H_ */
+
+#endif /* _AVRPP_HAL_ADCREADER_H_ */

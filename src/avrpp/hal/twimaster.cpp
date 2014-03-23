@@ -21,9 +21,9 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <avrpp/driver/twimaster.h>
+#include <avrpp/hal/twimaster.h>
 using namespace avrpp;
-using namespace avrpp::driver;
+using namespace avrpp::hal;
 using namespace avrpp::io;
 using namespace avrpp::util;
 

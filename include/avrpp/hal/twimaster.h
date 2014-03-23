@@ -21,8 +21,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef _AVRPP_DRIVER_TWISTREAM_H_
-#define _AVRPP_DRIVER_TWISTREAM_H_
+#ifndef _AVRPP_HAL_TWISTREAM_H_
+#define _AVRPP_HAL_TWISTREAM_H_
 
 #include <avrpp/util/buffer.h>
 #include <avrpp/config.h>
@@ -33,7 +33,7 @@ ISR(TWI_vect);
 
 namespace avrpp
 {
-namespace driver
+namespace hal
 {
 
 class TwiMaster
@@ -133,4 +133,4 @@ public:
 }
 
 
-#endif /* _AVRPP_DRIVER_TWISTREAM_H_ */
+#endif /* _AVRPP_HAL_TWISTREAM_H_ */

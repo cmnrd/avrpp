@@ -21,9 +21,9 @@
  *
  */
 
-#include <avrpp/driver/uarttransmitter.h>
+#include <avrpp/hal/uarttransmitter.h>
 using namespace avrpp;
-using namespace avrpp::driver;
+using namespace avrpp::hal;
 
 util::Buffer<uint8_t,UART0_TRANSMITTER_BUFFER_SIZE> Uart0Transmitter::buffer;
 

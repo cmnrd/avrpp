@@ -21,57 +21,26 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef _AVRPP_DRIVER_ADCREADER_H_
-#define _AVRPP_DRIVER_ADCREADER_H_
+#include <avrpp/hal/adcreader.h>
+using namespace avrpp;
+using namespace avrpp::hal;
+using namespace avrpp::io;
 
-#include <avr/interrupt.h>
-#include <avrpp/io.h>
+volatile uint16_t AdcReader::values[8] = {0};
+volatile uint8_t AdcReader::updatedFlags = 0;
 
-ISR(ADC_vect);
-
-namespace avrpp
+ISR(ADC_vect)
 {
-namespace driver
-{
+	static uint8_t currentChannel = 0;
 
-	class AdcReader
-	{
-	  friend void (::ADC_vect) (); // Allow ISR to access private elements
+	// read ADC value and set update flag
+	AdcReader::values[currentChannel] = ADConverter::readValue();
+	AdcReader::updatedFlags |= (1 << currentChannel);
 
-	  private:
-		static volatile uint16_t values[8];
-		static volatile uint8_t updatedFlags;
+	// Set to next channel
+	currentChannel = (currentChannel + 1) & 0x07; // & 0x07 does the same as % 8, but is faster
+	ADConverter::setChannel( (AdcChannel) (currentChannel));
 
-	  public:
-		static void init() // TODO let user choose the prescaler
-		{
-			// Enable and set prescaler to 16 (125kHz)
-			io::ADConverter::setPrescaler(io::AdcPrescaler::PRESCALER_16);
-			io::ADConverter::enable();
-			io::ADConverter::enableInterrupt();
-
-			// Start a first conversion to trigger ISR
-			io::ADConverter::setChannel(io::AdcChannel::ADC0);
-			io::ADConverter::startConversion();
-		}
-
-		static uint16_t getValue( uint8_t channel)
-		{
-			return values[channel];
-		}
-
-		static bool isUpdatedFlagSet( uint8_t channel)
-		{
-			return updatedFlags & (1 << channel);
-		}
-
-		static void clearUpdatedFlag( uint8_t channel)
-		{
-			updatedFlags &= ~(1 << channel);
-		}
-	};
+	// Start a new conversion, so Interrupt is triggered again
+	ADConverter::startConversion();
 }
-}
-
-
-#endif /* _AVRPP_DRIVER_ADCREADER_H_ */
