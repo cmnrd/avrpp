@@ -37,7 +37,7 @@ ISR(USART1_RX_vect);
 
 namespace avrpp
 {
-namespace io
+namespace driver
 {
 	class Uart0Receiver
 	{

@@ -24,6 +24,7 @@
 #include <avrpp/driver/uartreceiver.h>
 using namespace avrpp;
 using namespace avrpp::io;
+using namespace avrpp::driver;
 
 util::Buffer<uint8_t, UART0_RECEIVER_BUFFER_SIZE> Uart0Receiver::buffer;
 
