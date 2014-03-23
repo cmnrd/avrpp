@@ -21,71 +21,95 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef _AVRPP_DRIVER_UARTTRANSMITTER_H_
-#define _AVRPP_DRIVER_UARTTRANSMITTER_H_
+#ifndef _AVRPP_DRIVER_UARTRECEIVER_H_
+#define _AVRPP_DRIVER_UARTRECEIVER_H_
 
-#include <avrpp/io.h>
 #include <avrpp/config.h>
 #include <avrpp/util/buffer.h>
-#include <avr/interrupt.h>
+#include <avrpp/io.h>
 #include <util/setbaud.h>
+#include <avr/interrupt.h>
 
-ISR(USART0_UDRE_vect);
-ISR(USART1_UDRE_vect);
+ISR(USART0_RX_vect);
+ISR(USART1_RX_vect);
 
-// TODO split Uart0 and Uart1 into separate headers
-// TODO do not use macros to calculate baud values
-// TODO use template parameters for buffer size
-// TODO find a way to implement the ISRs inside the header
+// TODO see uarttransmitter todo list
 
 namespace avrpp
 {
-namespace driver
+namespace io
 {
-	class Uart0Transmitter
+	class Uart0Receiver
 	{
-		friend void (::USART0_UDRE_vect) ();
-
 	  private:
-		static util::Buffer<uint8_t, UART0_TRANSMITTER_BUFFER_SIZE> buffer;
+		static util::Buffer<uint8_t, UART0_RECEIVER_BUFFER_SIZE> buffer;
 	  public:
 		static void init()
 		{
-			DDRD |= (1 << PD1); // TODO generalize this
-
+			DDRD &= ~(1 << PD0);
 			io::Usart0::writeBaud(UBRR_VALUE);
 
 			if( USE_2X)
 				io::Usart0::enableDoubleSpeed();
 
-			io::Usart0::enableTransmitter();
+			io::Usart0::enableReceiver();
+			io::Usart0::enableInterrupts(io::Usart0InterruptEnable::RECEIVE_COMPLETE);
 		}
 
-		static void write( uint8_t byte);
+		static void flushBuffer()
+		{
+			buffer.flush();
+		}
+
+		static bool dataReceived()
+		{
+			return !buffer.isEmpty();
+		}
+
+		static uint8_t read()
+		{
+			return buffer.pop();
+		}
+
+		friend void (::USART0_RX_vect) ();
 	};
 
-	class Uart1Transmitter
+	class Uart1Receiver
 	{
-		friend void (::USART1_UDRE_vect) ();
-
 	  private:
-		static util::Buffer<uint8_t, UART1_TRANSMITTER_BUFFER_SIZE> buffer;
+		static util::Buffer<uint8_t, UART1_RECEIVER_BUFFER_SIZE> buffer;
 	  public:
 		static void init()
 		{
-			DDRD |= (1 << PD3);
-
+			DDRD &= ~(1 << PD2);
 			io::Usart1::writeBaud(UBRR_VALUE);
 
 			if( USE_2X)
 				io::Usart1::enableDoubleSpeed();
 
-			io::Usart1::enableTransmitter();
+			io::Usart1::enableReceiver();
+			io::Usart1::enableInterrupts(io::Usart1InterruptEnable::RECEIVE_COMPLETE);
 		}
 
-		static void write( uint8_t byte);
+		static void flushBuffer()
+		{
+			buffer.flush();
+		}
+
+		static bool dataReceived()
+		{
+			return !buffer.isEmpty();
+		}
+
+		static uint8_t read()
+		{
+			return buffer.pop();
+		}
+
+		friend void (::USART1_RX_vect) ();
 	};
 }
 }
 
-#endif /* _AVRPP_DRIVER_UARTTRANSMITTER_H_ */
+
+#endif /* _AVRPP_DRIVER_UARTRECEIVER_H_ */
