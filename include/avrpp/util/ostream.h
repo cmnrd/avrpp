@@ -29,8 +29,6 @@
 
 namespace avrpp
 {
-namespace util
-{
 	template<void (transmitByte)(uint8_t)>
 	class OStream : public Stream
 	{
@@ -82,7 +80,6 @@ namespace util
 		}
 	};
 
-}
 }
 
 #endif /* _AVRPP_UTIL_OSTREAM_H_ */

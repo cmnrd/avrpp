@@ -41,8 +41,6 @@
 
 namespace avrpp
 {
-namespace io
-{
 
 enum class Timer0InterruptFlag : uint8_t
 {
@@ -219,7 +217,6 @@ class Timer0
 
 };
 
-}
 }
 
 #endif

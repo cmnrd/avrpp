@@ -5,15 +5,13 @@
  * @author Christian Menard
  */
 
-#ifndef _AVRPP_OS_BUFFER_H_
-#define _AVRPP_OS_BUFFER_H_
+#ifndef _AVRPP_UTIL_BUFFER_H_
+#define _AVRPP_UTIL_BUFFER_H_
 
 #include <inttypes.h>
 #include <util/atomic.h>
 
 namespace avrpp
-{
-namespace util
 {
 
 /*
@@ -83,9 +81,5 @@ T Buffer<T, size>::pop()
 	return c;
 }
 }
-}
 
-
-
-
-#endif /* _AVRPP_OS_BUFFER_H_ */
+#endif /* _AVRPP_UTIL_BUFFER_H_ */

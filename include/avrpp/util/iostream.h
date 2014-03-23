@@ -31,14 +31,11 @@
 
 namespace avrpp
 {
-namespace util
-{
-	typedef OStream<hal::Uart0Transmitter::write> OStreamUart;
-	typedef IStream<hal::Uart0Receiver::read> IStreamUart;
+	typedef OStream<Uart0Transmitter::write> OStreamUart;
+	typedef IStream<Uart0Receiver::read> IStreamUart;
 
 	extern OStreamUart cout;
 	extern IStreamUart cin;
-}
 }
 
 

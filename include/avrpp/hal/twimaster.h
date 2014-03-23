@@ -33,8 +33,6 @@ ISR(TWI_vect);
 
 namespace avrpp
 {
-namespace hal
-{
 
 class TwiMaster
 {
@@ -42,11 +40,11 @@ class TwiMaster
 
 private:
 	static volatile bool transmissionFinished;
-	static util::Buffer<uint8_t, TWI_TRANSMIT_BUFFER_SIZE> transmitBuffer;
+	static Buffer<uint8_t, TWI_TRANSMIT_BUFFER_SIZE> transmitBuffer;
 
 	static void start()
 	{
-		io::Twi::writeControlRegister(
+		Twi::writeControlRegister(
 			(1 << TWEN)    // enable TWI
 		  | (1 << TWINT)   // clear TWI interrupt flag
 		  | (1 << TWIE)    // enable TWI interrupt
@@ -55,7 +53,7 @@ private:
 
 	static void stop()
 	{
-		io::Twi::writeControlRegister(
+		Twi::writeControlRegister(
 			(1 << TWEN) 	// enable TWI
 		  | (1 << TWINT)	// clear TWI interrupt flag and disable TWI interrupt
 		  | (1 << TWSTO));	// send stop condition
@@ -63,7 +61,7 @@ private:
 
 	static void restart()
 	{
-		io::Twi::writeControlRegister(
+		Twi::writeControlRegister(
 		    (1 << TWEN)   // enable TWI
 		  | (1 << TWINT)  // clear TWI interrupt flag
 		  | (1 << TWIE)   // enable TWI interrupt
@@ -73,8 +71,8 @@ private:
 
 	static void writeByte( uint8_t byte)
 	{
-		io::Twi::writeByte(byte);
-		io::Twi::writeControlRegister(
+		Twi::writeByte(byte);
+		Twi::writeControlRegister(
 		    (1 << TWEN)	// enable TWI
 		  | (1 << TWINT)	// clear TWI interrupt flag
 		  | (1 << TWIE));  // enable TWI interrupt
@@ -87,8 +85,8 @@ public:
 		// SDL and SDA are outputs
 		DDRC |= (1 << PC0) | (1 << PC1); // TODO replace by some global macros
 
-		io::Twi::setStatus(0);
-		io::Twi::setBitRate(((F_CPU / SCL_CLOCK) - 16) / 2); // TODO replace by some global macros // see the Datasheet for an explanation of the equation
+		Twi::setStatus(0);
+		Twi::setBitRate(((F_CPU / SCL_CLOCK) - 16) / 2); // TODO replace by some global macros // see the Datasheet for an explanation of the equation
 	}
 
 	static void sendByte( uint8_t address, uint8_t byte)
@@ -129,7 +127,6 @@ public:
 	}
 
 };
-}
 }
 
 

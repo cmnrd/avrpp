@@ -28,8 +28,6 @@
 
 namespace avrpp
 {
-namespace math
-{
 
 uint64_t extended_multiply(uint32_t x, uint32_t y)
 {
@@ -110,7 +108,6 @@ void lowPassFilter_shiftRight(T& mem, T x, uint8_t shift)
 }
 
 
-}
 }
 
 

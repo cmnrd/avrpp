@@ -40,25 +40,23 @@ ISR(USART1_UDRE_vect);
 
 namespace avrpp
 {
-namespace hal
-{
 	class Uart0Transmitter
 	{
 		friend void (::USART0_UDRE_vect) ();
 
 	  private:
-		static util::Buffer<uint8_t, UART0_TRANSMITTER_BUFFER_SIZE> buffer;
+		static Buffer<uint8_t, UART0_TRANSMITTER_BUFFER_SIZE> buffer;
 	  public:
 		static void init()
 		{
 			DDRD |= (1 << PD1); // TODO generalize this
 
-			io::Usart0::writeBaud(UBRR_VALUE);
+			Usart0::writeBaud(UBRR_VALUE);
 
 			if( USE_2X)
-				io::Usart0::enableDoubleSpeed();
+				Usart0::enableDoubleSpeed();
 
-			io::Usart0::enableTransmitter();
+			Usart0::enableTransmitter();
 		}
 
 		static void write( uint8_t byte);
@@ -69,23 +67,22 @@ namespace hal
 		friend void (::USART1_UDRE_vect) ();
 
 	  private:
-		static util::Buffer<uint8_t, UART1_TRANSMITTER_BUFFER_SIZE> buffer;
+		static Buffer<uint8_t, UART1_TRANSMITTER_BUFFER_SIZE> buffer;
 	  public:
 		static void init()
 		{
 			DDRD |= (1 << PD3);
 
-			io::Usart1::writeBaud(UBRR_VALUE);
+			Usart1::writeBaud(UBRR_VALUE);
 
 			if( USE_2X)
-				io::Usart1::enableDoubleSpeed();
+				Usart1::enableDoubleSpeed();
 
-			io::Usart1::enableTransmitter();
+			Usart1::enableTransmitter();
 		}
 
 		static void write( uint8_t byte);
 	};
-}
 }
 
 #endif /* _AVRPP_HAL_UARTTRANSMITTER_H_ */

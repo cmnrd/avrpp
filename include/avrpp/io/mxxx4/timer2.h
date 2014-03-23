@@ -38,8 +38,6 @@
 
 namespace avrpp
 {
-namespace io
-{
 
 enum class OutputMode2A : uint8_t
 {
@@ -214,7 +212,6 @@ class Timer2
 
 };
 
-}
 }
 
 #endif /* __AVRPP_IO_MXXX4_TIMER2_H_ */

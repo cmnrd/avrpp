@@ -30,8 +30,6 @@
 
 namespace avrpp
 {
-namespace math
-{
 	template<typename T,		// base type
 			 uint8_t magnitudeDigits,
 			 uint8_t fractionDigits>
@@ -482,7 +480,6 @@ namespace math
 
 
 }
-}
 
 
 #ifdef _AVRPP_UTIL_OSTREAM_H_
@@ -490,7 +487,7 @@ namespace math
 template<typename T,
 		 uint8_t magnitudeDigits,
 		 uint8_t fractionDigits>
-avrpp::util::OStreamUart& operator<<( avrpp::util::OStreamUart& stream, const avrpp::math::Fixpoint<T,magnitudeDigits,fractionDigits>& f)
+avrpp::OStreamUart& operator<<( avrpp::OStreamUart& stream, const avrpp::Fixpoint<T,magnitudeDigits,fractionDigits>& f)
 {
 	double x = 0.0;
 

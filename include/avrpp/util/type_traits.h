@@ -28,8 +28,6 @@
 
 namespace avrpp
 {
-namespace util
-{
 
 template<typename T>
 struct make_unsigned
@@ -127,7 +125,6 @@ template<>
 struct make_double_size<int32_t>
 { typedef int64_t type; };
 
-}
 }
 
 

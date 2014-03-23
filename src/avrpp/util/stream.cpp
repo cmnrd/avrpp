@@ -23,7 +23,7 @@
 
 #include <avrpp/util/stream.h>
 
-char avrpp::util::Stream::tempStr[STREAM_TEMP_STRING_SIZE] = {};
+char avrpp::Stream::tempStr[STREAM_TEMP_STRING_SIZE] = {};
 
 
 

@@ -31,9 +31,6 @@ ISR(ADC_vect);
 
 namespace avrpp
 {
-namespace hal
-{
-
 	class AdcReader
 	{
 	  friend void (::ADC_vect) (); // Allow ISR to access private elements
@@ -46,13 +43,13 @@ namespace hal
 		static void init() // TODO let user choose the prescaler
 		{
 			// Enable and set prescaler to 16 (125kHz)
-			io::ADConverter::setPrescaler(io::AdcPrescaler::PRESCALER_16);
-			io::ADConverter::enable();
-			io::ADConverter::enableInterrupt();
+			ADConverter::setPrescaler(AdcPrescaler::PRESCALER_16);
+			ADConverter::enable();
+			ADConverter::enableInterrupt();
 
 			// Start a first conversion to trigger ISR
-			io::ADConverter::setChannel(io::AdcChannel::ADC0);
-			io::ADConverter::startConversion();
+			ADConverter::setChannel(AdcChannel::ADC0);
+			ADConverter::startConversion();
 		}
 
 		static uint16_t getValue( uint8_t channel)
@@ -71,7 +68,5 @@ namespace hal
 		}
 	};
 }
-}
-
 
 #endif /* _AVRPP_HAL_ADCREADER_H_ */

@@ -24,8 +24,6 @@
 
 #include <avrpp/util/iostream.h>
 using namespace avrpp;
-using namespace avrpp::hal;
-using namespace avrpp::util;
 
 OStreamUart cout = OStream<Uart0Transmitter::write>();
 IStreamUart cin  = IStream<Uart0Receiver::read>();

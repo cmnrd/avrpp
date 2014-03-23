@@ -23,8 +23,6 @@
 
 #include <avrpp/hal/adcreader.h>
 using namespace avrpp;
-using namespace avrpp::hal;
-using namespace avrpp::io;
 
 volatile uint16_t AdcReader::values[8] = {0};
 volatile uint8_t AdcReader::updatedFlags = 0;

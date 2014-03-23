@@ -46,8 +46,6 @@
 
 namespace avrpp
 {
-namespace io
-{
 
 enum class Usart1InterruptFlag : uint8_t
 {
@@ -279,7 +277,6 @@ class Usart1
 
 };
 
-}
 }
 
 

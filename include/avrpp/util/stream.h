@@ -29,8 +29,6 @@
 
 namespace avrpp
 {
-namespace util
-{
 
 class Stream
 {
@@ -41,7 +39,6 @@ class Stream
 	static char tempStr[STREAM_TEMP_STRING_SIZE];
 };
 
-}
 }
 
 #endif /* _AVRPP_UTIL_STREAM_H_ */

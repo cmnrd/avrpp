@@ -38,8 +38,6 @@
 
 namespace avrpp
 {
-namespace io
-{
 
 	enum class AdcReference : uint8_t
 	{
@@ -235,7 +233,6 @@ class ADConverter
 	}
 };
 
-}
 }
 
 

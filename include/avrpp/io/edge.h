@@ -30,8 +30,6 @@
 
 namespace avrpp
 {
-namespace io
-{
 
 	enum class Edge : uint8_t
 	{
@@ -39,7 +37,6 @@ namespace io
 		RISING_EDGE
 	};
 
-}
 }
 
 #endif /* _AVRPP_IO_EDGE_H_ */

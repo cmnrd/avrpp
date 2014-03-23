@@ -29,8 +29,6 @@
 
 namespace avrpp
 {
-namespace util
-{
 
 	template<uint8_t (receiveByte)()>
 	class IStream : public Stream
@@ -120,7 +118,6 @@ namespace util
 
 		}
 	};
-}
 }
 
 

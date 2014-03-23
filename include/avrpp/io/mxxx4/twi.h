@@ -36,8 +36,6 @@
 
 namespace avrpp
 {
-namespace io
-{
 
 enum class TwiPrescaler : uint8_t
 {
@@ -98,7 +96,6 @@ class Twi
 
 };
 
-}
 }
 
 #endif /* _AVRPP_IO_MXXX4_TWI_H_ */

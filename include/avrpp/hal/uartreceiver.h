@@ -37,23 +37,21 @@ ISR(USART1_RX_vect);
 
 namespace avrpp
 {
-namespace hal
-{
 	class Uart0Receiver
 	{
 	  private:
-		static util::Buffer<uint8_t, UART0_RECEIVER_BUFFER_SIZE> buffer;
+		static Buffer<uint8_t, UART0_RECEIVER_BUFFER_SIZE> buffer;
 	  public:
 		static void init()
 		{
 			DDRD &= ~(1 << PD0);
-			io::Usart0::writeBaud(UBRR_VALUE);
+			Usart0::writeBaud(UBRR_VALUE);
 
 			if( USE_2X)
-				io::Usart0::enableDoubleSpeed();
+				Usart0::enableDoubleSpeed();
 
-			io::Usart0::enableReceiver();
-			io::Usart0::enableInterrupts(io::Usart0InterruptEnable::RECEIVE_COMPLETE);
+			Usart0::enableReceiver();
+			Usart0::enableInterrupts(Usart0InterruptEnable::RECEIVE_COMPLETE);
 		}
 
 		static void flushBuffer()
@@ -77,18 +75,18 @@ namespace hal
 	class Uart1Receiver
 	{
 	  private:
-		static util::Buffer<uint8_t, UART1_RECEIVER_BUFFER_SIZE> buffer;
+		static Buffer<uint8_t, UART1_RECEIVER_BUFFER_SIZE> buffer;
 	  public:
 		static void init()
 		{
 			DDRD &= ~(1 << PD2);
-			io::Usart1::writeBaud(UBRR_VALUE);
+			Usart1::writeBaud(UBRR_VALUE);
 
 			if( USE_2X)
-				io::Usart1::enableDoubleSpeed();
+				Usart1::enableDoubleSpeed();
 
-			io::Usart1::enableReceiver();
-			io::Usart1::enableInterrupts(io::Usart1InterruptEnable::RECEIVE_COMPLETE);
+			Usart1::enableReceiver();
+			Usart1::enableInterrupts(Usart1InterruptEnable::RECEIVE_COMPLETE);
 		}
 
 		static void flushBuffer()
@@ -108,7 +106,6 @@ namespace hal
 
 		friend void (::USART1_RX_vect) ();
 	};
-}
 }
 
 

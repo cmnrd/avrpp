@@ -23,9 +23,6 @@
 
 #include <avrpp/hal/twimaster.h>
 using namespace avrpp;
-using namespace avrpp::hal;
-using namespace avrpp::io;
-using namespace avrpp::util;
 
 
 Buffer<uint8_t, TWI_TRANSMIT_BUFFER_SIZE> TwiMaster::transmitBuffer = Buffer<uint8_t, TWI_TRANSMIT_BUFFER_SIZE>();

@@ -43,8 +43,7 @@
 
 namespace avrpp
 {
-namespace io
-{
+
 enum class Timer1InterruptFlag : uint8_t
 {
 	INPUT_CAPTURE 	= (1 << ICF1),
@@ -314,7 +313,6 @@ class Timer1
 
 };
 
-}
 }
 
 #endif // _AVRPP_IO_MXXX4_TIMER1_H
