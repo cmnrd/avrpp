@@ -29,75 +29,7 @@ Buffer<uint8_t, TWI_TRANSMIT_BUFFER_SIZE> TwiMaster::transmitBuffer = Buffer<uin
 
 volatile bool TwiMaster::transmissionFinished = true;
 
-ISR(TWI_vect)
-{
 
-	static uint8_t frameSize = 0;
-	static uint8_t pos = 0;
-	static uint8_t currentByte = 0;
-
-	uint8_t state = Twi::getStatus();
-
-	switch( state)
-	{
-	case 0x08: // start condition has been transmitted
-		// -> send address
-
-		// pop the frame size so the address can be accessed
-		frameSize = TwiMaster::transmitBuffer.pop();
-
-		currentByte = TwiMaster::transmitBuffer.pop();
-		TwiMaster::writeByte( currentByte);
-		break;
-	case 0x10: // repeated start condition has been transmitted
-		// -> send last byte again
-		TwiMaster::writeByte( currentByte);
-		break;
-	case 0x18: // address has been transmitted and ACK has been received
-		// -> send data
-
-		currentByte = TwiMaster::transmitBuffer.pop();
-
-		TwiMaster::writeByte( currentByte);
-		pos = 1;
-		break;
-	case 0x28: // data byte has been transmitted and ACK has been received
-		// -> send more data or a stop condition;
-
-		if( pos < frameSize) // is there data to be send
-		{
-			currentByte = TwiMaster::transmitBuffer.pop();
-
-			TwiMaster::writeByte( currentByte);
-			pos++;
-		}
-		else // send stop condition or restart if there is a new frame to be send
-		{
-			if( TwiMaster::transmitBuffer.isEmpty())
-			{
-				// there is not another frame to be send -> send stop condition
-				TwiMaster::stop();
-				TwiMaster::transmissionFinished = true;
-			}
-			// check if a whole frame is in the buffer
-			else if (TwiMaster::transmitBuffer.peek() + 2 <= TwiMaster::transmitBuffer.count() )
-			{
-				TwiMaster::restart();
-			}
-			else
-			{
-				// there is not a whole frame in buffer -> send stop condition, restart after frame completed
-				TwiMaster::stop();
-				TwiMaster::transmissionFinished = true;
-			}
-		}
-
-		break;
-	default: // There was an error -> send last byte again
-		TwiMaster::start();
-		break;
-	}
-}
 
 
 

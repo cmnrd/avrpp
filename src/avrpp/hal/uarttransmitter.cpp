@@ -32,14 +32,6 @@ void Uart0Transmitter::write(uint8_t byte)
 	Usart0::enableInterrupts(Usart0InterruptEnable::DATA_REGISTER_EMPTY);
 }
 
-ISR(USART0_UDRE_vect)
-{
-	uint8_t tmp = Uart0Transmitter::buffer.pop();
-	Usart0::writeByte(tmp);
-	if( Uart0Transmitter::buffer.isEmpty())
-		Usart0::disableInterrupts(Usart0InterruptEnable::DATA_REGISTER_EMPTY);
-}
-
 Buffer<uint8_t,UART1_TRANSMITTER_BUFFER_SIZE> Uart1Transmitter::buffer;
 
 void Uart1Transmitter::write(uint8_t byte)
@@ -48,10 +40,4 @@ void Uart1Transmitter::write(uint8_t byte)
 	Usart0::enableInterrupts(Usart0InterruptEnable::DATA_REGISTER_EMPTY);
 }
 
-ISR(USART1_UDRE_vect)
-{
-	uint8_t tmp = Uart1Transmitter::buffer.pop();
-	Usart1::writeByte(tmp);
-	if( Uart1Transmitter::buffer.isEmpty())
-		Usart1::disableInterrupts(Usart1InterruptEnable::DATA_REGISTER_EMPTY);
-}
+

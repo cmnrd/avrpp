@@ -85,4 +85,20 @@ namespace avrpp
 	};
 }
 
+inline void USART0_UDRE_vect()
+{
+	uint8_t tmp = avrpp::Uart0Transmitter::buffer.pop();
+	avrpp::Usart0::writeByte(tmp);
+	if( avrpp::Uart0Transmitter::buffer.isEmpty())
+		avrpp::Usart0::disableInterrupts(avrpp::Usart0InterruptEnable::DATA_REGISTER_EMPTY);
+}
+
+inline void USART1_UDRE_vect()
+{
+	uint8_t tmp = avrpp::Uart1Transmitter::buffer.pop();
+	avrpp::Usart1::writeByte(tmp);
+	if( avrpp::Uart1Transmitter::buffer.isEmpty())
+		avrpp::Usart1::disableInterrupts(avrpp::Usart1InterruptEnable::DATA_REGISTER_EMPTY);
+}
+
 #endif /* _AVRPP_HAL_UARTTRANSMITTER_H_ */

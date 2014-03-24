@@ -108,5 +108,15 @@ namespace avrpp
 	};
 }
 
+inline void USART0_RX_vect()
+{
+	avrpp::Uart0Receiver::buffer.push(avrpp::Usart0::readByte());
+}
+
+inline void USART1_RX_vect()
+{
+	avrpp::Uart1Receiver::buffer.push(avrpp::Usart1::readByte());
+}
+
 
 #endif /* _AVRPP_HAL_UARTRECEIVER_H_ */
