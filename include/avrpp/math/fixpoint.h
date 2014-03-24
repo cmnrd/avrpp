@@ -425,8 +425,8 @@ namespace avrpp
 			}
 		}
 		
-		static double toDouble() { return ((double) (this->fixpoint)) / ( ( (T) 1) << fractionDigits); }
-		static float  toFloat()  { return ((float) (this->fixpoint)) / ( ( (T) 1) << fractionDigits); }
+		double toDouble() { return ((double) (this->fixpoint)) / ( ( (T) 1) << fractionDigits); }
+		float  toFloat()  { return ((float) (this->fixpoint)) / ( ( (T) 1) << fractionDigits); }
 
 		template<typename U>
 		static Fixpoint arctan2( U a, U b)
