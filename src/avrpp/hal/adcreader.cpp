@@ -26,3 +26,19 @@ using namespace avrpp;
 
 volatile uint16_t AdcReader::values[8] = {0};
 volatile uint8_t AdcReader::updatedFlags = 0;
+
+ISR(ADC_vect)
+{
+	static uint8_t currentChannel = 0;
+
+	// read ADC value and set update flag
+	AdcReader::values[currentChannel] = ADConverter::readValue();
+	AdcReader::updatedFlags |= (1 << currentChannel);
+
+	// Set to next channel
+	currentChannel = (currentChannel + 1) & 0x07; // & 0x07 does the same as % 8, but is faster
+	ADConverter::setChannel( (AdcChannel) (currentChannel));
+
+	// Start a new conversion, so Interrupt is triggered again
+	ADConverter::startConversion();
+}

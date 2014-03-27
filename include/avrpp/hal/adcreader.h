@@ -69,20 +69,4 @@ namespace avrpp
 	};
 }
 
-inline void ADC_vect()
-{
-	static uint8_t currentChannel = 0;
-
-	// read ADC value and set update flag
-	avrpp::AdcReader::values[currentChannel] = avrpp::ADConverter::readValue();
-	avrpp::AdcReader::updatedFlags |= (1 << currentChannel);
-
-	// Set to next channel
-	currentChannel = (currentChannel + 1) & 0x07; // & 0x07 does the same as % 8, but is faster
-	avrpp::ADConverter::setChannel( (avrpp::AdcChannel) (currentChannel));
-
-	// Start a new conversion, so Interrupt is triggered again
-	avrpp::ADConverter::startConversion();
-}
-
 #endif /* _AVRPP_HAL_ADCREADER_H_ */

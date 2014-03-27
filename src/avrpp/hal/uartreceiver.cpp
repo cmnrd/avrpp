@@ -25,4 +25,15 @@
 using namespace avrpp;
 
 Buffer<uint8_t, UART0_RECEIVER_BUFFER_SIZE> Uart0Receiver::buffer;
+
+ISR(USART0_RX_vect)
+{
+	Uart0Receiver::buffer.push(Usart0::readByte());
+}
+
 Buffer<uint8_t, UART1_RECEIVER_BUFFER_SIZE> Uart1Receiver::buffer;
+
+ISR(USART1_RX_vect)
+{
+	Uart1Receiver::buffer.push(Usart1::readByte());
+}
