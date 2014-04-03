@@ -41,13 +41,15 @@ namespace avrpp
 
 		void read( char c[])
 		{
-			uint8_t i = 255;
-			do
+			char* ptr = c;
+
+			get(*ptr);
+			while(*ptr != '\n')
 			{
-				i++;
-				get(c[i]);
-			} while(c[i] != '\n');
-			c[i] = '\0';
+				ptr++;
+				get(*ptr);
+			}
+			*ptr = '\0';
 		}
 
 		IStream& operator>>(char& c)

@@ -23,7 +23,7 @@ namespace avrpp
 /**
  * @tparam T base type
  * @tparam size total number of entries of type T
- * @tparam U
+ * @tparam U Scheduler, void if no Scheduler is used
  */
 template<typename T, uint8_t size, typename U=void>
 class Buffer

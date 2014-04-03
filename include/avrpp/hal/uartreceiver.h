@@ -37,10 +37,15 @@ ISR(USART1_RX_vect);
 
 namespace avrpp
 {
+	/**
+	 * @tparam bufferSize size of the internal Buffer
+	 * @tparam T Scheduler, void if no Scheduler is used
+	 */
+	template<uint8_t bufferSize, typename T = void>
 	class Uart0Receiver
 	{
 	  private:
-		static Buffer<uint8_t, UART0_RECEIVER_BUFFER_SIZE> buffer;
+		static Buffer<uint8_t, bufferSize, T> buffer;
 	  public:
 		static void init()
 		{
@@ -69,13 +74,25 @@ namespace avrpp
 			return buffer.pop();
 		}
 
-		friend void (::USART0_RX_vect) ();
+		static void handleUsart0Rx()
+		{
+			if(!buffer.full()) // otherwise drop received byte
+				buffer.push(Usart0::readByte());
+		}
 	};
 
+	template<uint8_t bufferSize, typename T>
+	Buffer<uint8_t, bufferSize, T> Uart0Receiver<bufferSize, T>::buffer;
+
+	/**
+	 * @tparam bufferSize size of the internal Buffer
+	 * @tparam T Scheduler, void if no Scheduler is used
+	 */
+	template<uint8_t bufferSize, typename T = void>
 	class Uart1Receiver
 	{
 	  private:
-		static Buffer<uint8_t, UART1_RECEIVER_BUFFER_SIZE> buffer;
+		static Buffer<uint8_t, bufferSize, T> buffer;
 	  public:
 		static void init()
 		{
@@ -104,8 +121,15 @@ namespace avrpp
 			return buffer.pop();
 		}
 
-		friend void (::USART1_RX_vect) ();
+		static void handleUsart1Rx()
+		{
+			if(!buffer.full()) // otherwise drop received byte
+				buffer.push(Usart1::readByte());
+		}
 	};
+
+	template<uint8_t bufferSize, typename T>
+	Buffer<uint8_t, bufferSize, T> Uart1Receiver<bufferSize, T>::buffer;
 }
 
 

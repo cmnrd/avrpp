@@ -40,12 +40,15 @@ ISR(USART1_UDRE_vect);
 
 namespace avrpp
 {
+/**
+	 * @tparam bufferSize size of the internal Buffer
+	 * @tparam T Scheduler, void if no Scheduler is used
+	 */
+	template<uint8_t bufferSize, typename T = void>
 	class Uart0Transmitter
 	{
-		friend void (::USART0_UDRE_vect) ();
-
 	  private:
-		static Buffer<uint8_t, UART0_TRANSMITTER_BUFFER_SIZE> buffer;
+		static Buffer<uint8_t, bufferSize, T> buffer;
 	  public:
 		static void init()
 		{
@@ -59,15 +62,35 @@ namespace avrpp
 			Usart0::enableTransmitter();
 		}
 
-		static void write( uint8_t byte);
+		static void write( uint8_t byte)
+		{
+			buffer.push(byte);
+			Usart0::enableInterrupts(Usart0InterruptEnable::DATA_REGISTER_EMPTY);
+		}
+
+		static void handleUsart0Udre()
+		{
+			uint8_t tmp = buffer.pop();
+			Usart0::writeByte(tmp);
+			if( buffer.isEmpty())
+				Usart0::disableInterrupts(Usart0InterruptEnable::DATA_REGISTER_EMPTY);
+		}
 	};
 
+	template<uint8_t bufferSize, typename T>
+	Buffer<uint8_t,bufferSize, T> Uart0Transmitter<bufferSize,T>::buffer;
+
+	/**
+	 * @tparam bufferSize size of the internal Buffer
+	 * @tparam T Scheduler, void if no Scheduler is used
+	 */
+	template<uint8_t bufferSize, typename T = void>
 	class Uart1Transmitter
 	{
 		friend void (::USART1_UDRE_vect) ();
 
 	  private:
-		static Buffer<uint8_t, UART1_TRANSMITTER_BUFFER_SIZE> buffer;
+		static Buffer<uint8_t, bufferSize,T> buffer;
 	  public:
 		static void init()
 		{
@@ -81,8 +104,23 @@ namespace avrpp
 			Usart1::enableTransmitter();
 		}
 
-		static void write( uint8_t byte);
+		static void write( uint8_t byte)
+		{
+			buffer.push(byte);
+			Usart1::enableInterrupts(Usart1InterruptEnable::DATA_REGISTER_EMPTY);
+		}
+
+		static void handleUsart1Udre()
+		{
+			uint8_t tmp = buffer.pop();
+			Usart1::writeByte(tmp);
+			if( buffer.isEmpty())
+				Usart1::disableInterrupts(Usart1InterruptEnable::DATA_REGISTER_EMPTY);
+		}
 	};
+
+	template<uint8_t bufferSize, typename T>
+	Buffer<uint8_t,bufferSize, T> Uart1Transmitter<bufferSize,T>::buffer;
 }
 
 #endif /* _AVRPP_HAL_UARTTRANSMITTER_H_ */
