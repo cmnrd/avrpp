@@ -62,6 +62,7 @@ namespace avrpp
 		}
 
 
+// 		Cast from T2 to T
 		template<typename T2,
 				 uint8_t magnitudeDigits2,
 				 uint8_t fractionDigits2>
@@ -70,14 +71,22 @@ namespace avrpp
 			if( sizeof(T2) > sizeof(T))
 			{
 				if( fractionDigits2 > fractionDigits)
+				{
+					T round = ((1 << (fractionDigits2-fractionDigits -1)) & f.getFixpoint()) ? 1 : 0;
 					this->fixpoint = (T) (f.getFixpoint() >> (fractionDigits2 - fractionDigits));
+					this->fixpoint += round;
+				}
 				else
 					this->fixpoint = (T) (f.getFixpoint() << (fractionDigits - fractionDigits2));
 			}
 			else
 			{
 				if( fractionDigits2 > fractionDigits)
+				{
+					T round = ((1 << (fractionDigits2-fractionDigits -1)) & f.getFixpoint()) ? 1 : 0;
 					this->fixpoint = ( ((T) f.getFixpoint()) >> (fractionDigits2 - fractionDigits));
+					this->fixpoint += round;
+				}
 				else
 					this->fixpoint = ( ((T) f.getFixpoint()) << (fractionDigits - fractionDigits2));
 			}
